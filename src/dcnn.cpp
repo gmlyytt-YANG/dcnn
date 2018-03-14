@@ -18,13 +18,15 @@ void dcnn(string& config_file_path) {
     
     string net = get<0>(model_param);
     string model = get<1>(model_param);
-    CNN F = CNN(net, model);
+    CNN::get_instance(net, model);
     CascadeRegressor cas_load;
     cas_load.LoadCascadeRegressor(get<2>(model_param));
     cout << "load model done\n" << endl;
     
     int count = 0;
     for (int i=0; i<bboxes.size(); i++) {
+        if (i > 50)
+            break;
         Mat img_gray=cv::imread(images_paths[i],0);
         img_gray.convertTo(img_gray, CV_32FC1);
         if (!img_gray.data) {
@@ -37,7 +39,7 @@ void dcnn(string& config_file_path) {
         Mat f_face = get_face(f_bbox, img_gray);
         //cout << f_face << endl; 
         //vector<pair<float, float> > landmark = F.forward(f_face);
-        cv::Mat_<double> current_shape = F.forward(f_face);
+        cv::Mat_<double> current_shape = CNN::get_instance()->forward(f_face);
         //cout << current_shape(0,0) << " " << current_shape(0,1) << endl;
         bboxes[i].reprojectLandmark(current_shape);
         //cout << current_shape(0,0) << " " << current_shape(0,1) << endl;
@@ -56,4 +58,5 @@ void dcnn(string& config_file_path) {
     t_end = time(NULL); 
     time_consume += difftime(t_end, t_start);
     cout << "the total time of processing " << bboxes.size() <<  " images is " << setprecision(3) << time_consume << " s." << endl;
+    //delete CNN::get_instance();
 }

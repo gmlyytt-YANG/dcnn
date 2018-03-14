@@ -12,6 +12,8 @@ CNN::CNN(const string& net, const string& model){
     }
 }
 
+boost::shared_ptr<CNN> CNN::instance(NULL);
+
 cv::Mat_<double> CNN::forward(Mat& img) {
     caffe::MemoryDataLayer<float>* m_layer = (caffe::MemoryDataLayer<float> *)_cnn->layers()[0].get();
     float label = 0.0;

@@ -1,0 +1,7 @@
+../model/dcnn/1_F_deploy.prototxt
+../model/dcnn/_iter_1000000.caffemodel
+lfwModel
+0
+1
+../example/testset/
+../example/test_images_list_without_ground_truth.txt
